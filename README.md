@@ -4,3 +4,4 @@ This project focuses on building dynamic frontend components for a marketplace w
 
 **Author:** Ali Hamza  
 **Class:** Thursday 9-12
+[Document (5).pdf](https://github.com/user-attachments/files/18477424/Document.5.pdf)
