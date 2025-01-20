@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Footer from '../Component/Footer/Footer'
 import Header from '../Component/Header/Header'
+import Link from 'next/link';
+
 
 const About = () => {
   return (
@@ -145,12 +147,12 @@ const About = () => {
             Join the thousands of happy customers who trust us for their 
             shopping needs.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg shadow-lg mt-6 transition"
           >
             Start Shopping Now
-          </a>
+          </Link>
         </div>
       </div>
       <br/>

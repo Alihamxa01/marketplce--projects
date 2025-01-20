@@ -24,24 +24,24 @@ const Header = () => {
          
           {/* Navigation Links */}
           <nav className="flex space-x-6">
-            <a 
+            <Link 
               href="/" 
               className="text-gray-700 hover:text-pink-500 transition font-medium"
             >
               Home
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/Wish" 
               className="text-gray-700 hover:text-pink-500 transition font-medium"
             >
               About
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/" 
               className="text-gray-700 hover:text-pink-500 transition font-medium"
             >
               Contact
-            </a>
+            </Link>
           </nav>
         </div>
       </header>

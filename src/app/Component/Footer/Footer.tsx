@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { FaInstagram, FaFacebook, FaLinkedin } from 'react-icons/fa';
 import { SiVisa, SiMastercard, SiPaypal } from 'react-icons/si';
+import Link from 'next/link';
 
 const Footer = () => {
   return (
@@ -89,30 +90,30 @@ const Footer = () => {
         {/* Social Media and Payments */}
         <div className="flex flex-col items-center space-y-6 mb-10">
           <div className="flex space-x-6">
-            <a
+            <Link
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-pink-500 transition"
             >
               <FaInstagram size={24} />
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://facebook.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-pink-500 transition"
             >
               <FaFacebook size={24} />
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-600 hover:text-pink-500 transition"
             >
               <FaLinkedin size={24} />
-            </a>
+            </Link>
           </div>
           <div className="flex space-x-6">
             <SiVisa
@@ -132,33 +133,33 @@ const Footer = () => {
 
         {/* Navigation Links */}
         <div className="flex justify-center space-x-6 mb-10">
-          <a href="/" className="text-gray-700 hover:text-pink-500 transition">
+          <Link href="/" className="text-gray-700 hover:text-pink-500 transition">
             Home
-          </a>
-          <a
+          </Link>
+          <Link
             href="/About"
             className="text-gray-700 hover:text-pink-500 transition"
           >
             About
-          </a>
-          <a
+          </Link>
+          <Link
             href="/Contact"
             className="text-gray-700 hover:text-pink-500 transition"
           >
             Contact
-          </a>
-          <a
+          </Link>
+          <Link
             href="/privacy"
             className="text-gray-700 hover:text-pink-500 transition"
           >
             Privacy Policy
-          </a>
-          <a
+          </Link>
+          <Link
             href="/terms"
             className="text-gray-700 hover:text-pink-500 transition"
           >
             Terms of Service
-          </a>
+          </Link>
         </div>
 
         {/* Footer Credit */}

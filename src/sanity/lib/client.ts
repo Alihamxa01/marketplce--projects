@@ -1,6 +1,6 @@
 import { createClient } from 'next-sanity'
-import {token, apiVersion, dataset, projectId } from '../env'
-import builder from '@sanity/image-url/lib/types/builder'
+// import {token, apiVersion, dataset, projectId } from '../env'
+// import builder from '@sanity/image-url/lib/types/builder'
 
  const client = createClient({
   projectId:"z2997vq8",

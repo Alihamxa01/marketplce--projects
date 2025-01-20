@@ -219,7 +219,7 @@ function RelatedProducts({ products }: { products: any[] }) {
                     src={urlFor(product.image)
                       .width(400)
                       .height(400)
-                      .bg('ffffff')
+                      .bg("ffffff")
                       .url()}
                     alt={product.name}
                     fill
