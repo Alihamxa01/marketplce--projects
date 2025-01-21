@@ -720,8 +720,8 @@
 
 
 
-
-import { GetServerSideProps } from 'next';
+// app/products/[productId]/page.tsx
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import client from '@/sanity/lib/client';
 import imageUrlBuilder from '@sanity/image-url';
@@ -757,8 +757,7 @@ interface Product {
 }
 
 interface ProductPageProps {
-  product: Product;
-  relatedProducts: Product[];
+  productId: string;
 }
 
 async function getProduct(productId: string): Promise<Product | null> {
@@ -807,78 +806,27 @@ async function getRelatedProducts(category: string, currentProductId: string): P
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { productId } = context.params as { productId: string };
+export default function ProductPage({ params }: { params: { productId: string } }) {
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
-  const product = await getProduct(productId);
+  useEffect(() => {
+    const fetchProductData = async () => {
+      const productData = await getProduct(params.productId);
+      if (productData) {
+        setProduct(productData);
+        const relatedData = await getRelatedProducts(productData.category, productData._id);
+        setRelatedProducts(relatedData);
+      }
+    };
+
+    fetchProductData();
+  }, [params.productId]);
 
   if (!product) {
-    return {
-      notFound: true,
-    };
+    return <div>Loading...</div>;
   }
 
-  const relatedProducts = await getRelatedProducts(product.category, productId);
-
-  return {
-    props: {
-      product,
-      relatedProducts,
-    },
-  };
-};
-
-function RelatedProducts({ products }: { products: Product[] }) {
-  return (
-    <div className="mt-16">
-      <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Products</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
-          <Link href={`/product/${product._id}`} key={product._id} className="block">
-            <div className="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl">
-              <div className="relative aspect-square">
-                {product.image && product.image.asset ? (
-                  <Image
-                    src={urlFor(product.image)
-                      .width(400)
-                      .height(400)
-                      .bg("ffffff")
-                      .url() || ''}
-                    alt={product.name}
-                    fill
-                    className="object-cover group-hover:opacity-90 transition-opacity"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full bg-gray-200 text-gray-500">
-                    No Image
-                  </div>
-                )}
-                {product.discountPercentage && (
-                  <div className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    {product.discountPercentage}% OFF
-                  </div>
-                )}
-              </div>
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">
-                  {product.name}
-                </h3>
-                <div className="flex justify-between items-center">
-                  <p className="text-indigo-600 font-bold text-xl">${product.price}</p>
-                  <span className={`text-sm font-medium ${product.stockLevel ? 'text-green-600' : 'text-red-600'}`}>
-                    {product.stockLevel ? 'In Stock' : 'Out of Stock'}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default function ProductPage({ product, relatedProducts }: ProductPageProps) {
   return (
     <div>
       <Header />
@@ -973,6 +921,56 @@ export default function ProductPage({ product, relatedProducts }: ProductPagePro
         </div>
       </div>
       <Footer />
+    </div>
+  );
+}
+
+function RelatedProducts({ products }: { products: Product[] }) {
+  return (
+    <div className="mt-16">
+      <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Products</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {products.map((product) => (
+          <Link href={`/product/${product._id}`} key={product._id} className="block">
+            <div className="group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl">
+              <div className="relative aspect-square">
+                {product.image && product.image.asset ? (
+                  <Image
+                    src={urlFor(product.image)
+                      .width(400)
+                      .height(400)
+                      .bg("ffffff")
+                      .url() || ''}
+                    alt={product.name}
+                    fill
+                    className="object-cover group-hover:opacity-90 transition-opacity"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full bg-gray-200 text-gray-500">
+                    No Image
+                  </div>
+                )}
+                {product.discountPercentage && (
+                  <div className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                    {product.discountPercentage}% OFF
+                  </div>
+                )}
+              </div>
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-indigo-600 transition-colors">
+                  {product.name}
+                </h3>
+                <div className="flex justify-between items-center">
+                  <p className="text-indigo-600 font-bold text-xl">${product.price}</p>
+                  <span className={`text-sm font-medium ${product.stockLevel ? 'text-green-600' : 'text-red-600'}`}>
+                    {product.stockLevel ? 'In Stock' : 'Out of Stock'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
