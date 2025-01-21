@@ -473,8 +473,7 @@
 
 // ProductPage.tsx
 
-
-
+import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import client from '@/sanity/lib/client';
 import imageUrlBuilder from '@sanity/image-url';
@@ -510,9 +509,8 @@ interface Product {
 }
 
 interface ProductPageProps {
-  params: {
-    productId: string;
-  };
+  product: Product;
+  relatedProducts: Product[];
 }
 
 async function getProduct(productId: string): Promise<Product | null> {
@@ -561,6 +559,27 @@ async function getRelatedProducts(category: string, currentProductId: string): P
   );
 }
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { productId } = context.params as { productId: string };
+
+  const product = await getProduct(productId);
+
+  if (!product) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const relatedProducts = await getRelatedProducts(product.category, productId);
+
+  return {
+    props: {
+      product,
+      relatedProducts,
+    },
+  };
+};
+
 function RelatedProducts({ products }: { products: Product[] }) {
   return (
     <div className="mt-16">
@@ -576,7 +595,7 @@ function RelatedProducts({ products }: { products: Product[] }) {
                       .width(400)
                       .height(400)
                       .bg("ffffff")
-                      .url()}
+                      .url() || ''}
                     alt={product.name}
                     fill
                     className="object-cover group-hover:opacity-90 transition-opacity"
@@ -611,15 +630,7 @@ function RelatedProducts({ products }: { products: Product[] }) {
   );
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
-  const product: Product | null = await getProduct(params.productId);
-
-  if (!product) {
-    return <div className="text-center text-xl text-gray-600">Product not found</div>;
-  }
-
-  const relatedProducts: Product[] = await getRelatedProducts(product.category, params.productId);
-
+export default function ProductPage({ product, relatedProducts }: ProductPageProps) {
   return (
     <div>
       <Header />
@@ -633,7 +644,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   .width(1000)
                   .height(1000)
                   .bg('ffffff')
-                  .url()}
+                  .url() || ''}
                 alt={product.name}
                 fill
                 className="object-cover"
