@@ -1,6 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+
+
 const Header = () => {
+
     return (
       <header className=" w-full  bg-white/30 border-b border-gray-300 shadow-md">
         <div className="container mx-auto flex items-center justify-between px-6 py-4">
@@ -31,13 +34,13 @@ const Header = () => {
               Home
             </Link>
             <Link 
-              href="/Wish" 
+              href="/About" 
               className="text-gray-700 hover:text-pink-500 transition font-medium"
             >
               About
             </Link>
             <Link 
-              href="/" 
+              href="/Contact" 
               className="text-gray-700 hover:text-pink-500 transition font-medium"
             >
               Contact
@@ -47,6 +50,4 @@ const Header = () => {
       </header>
     );
   };
-  
-  export default Header;
-  
+  export default Header
