@@ -717,8 +717,6 @@
 //       <Footer />
 //     </div>
 //   );}
-
-
 "use client";
 
 import Image from 'next/image';
@@ -729,6 +727,7 @@ import { RiShoppingCart2Fill } from 'react-icons/ri';
 import Link from 'next/link';
 import Footer from '../../Component/Footer/Footer';
 import Header from '../../Component/Header/Header';
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 const builder = imageUrlBuilder(client);
 
@@ -756,9 +755,10 @@ interface Product {
 }
 
 interface ProductPageProps {
-  params: {
+  params: Params & {
     productId: string;
   };
+  searchParams?: { [key: string]: string | string[] | undefined };
 }
 
 async function getProduct(productId: string): Promise<Product | null> {
@@ -857,7 +857,7 @@ function RelatedProducts({ products }: { products: Product[] }) {
   );
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage({ params, searchParams }: ProductPageProps) {
   const product: Product | null = await getProduct(params.productId);
 
   if (!product) {
