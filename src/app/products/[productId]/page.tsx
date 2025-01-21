@@ -471,9 +471,6 @@
 // }
 
 
-
-
-
 // ProductPage.tsx
 
 
