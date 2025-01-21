@@ -717,6 +717,8 @@
 //       <Footer />
 //     </div>
 //   );}
+
+
 "use client";
 
 import Image from 'next/image';
@@ -727,7 +729,7 @@ import { RiShoppingCart2Fill } from 'react-icons/ri';
 import Link from 'next/link';
 import Footer from '../../Component/Footer/Footer';
 import Header from '../../Component/Header/Header';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
+// import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 const builder = imageUrlBuilder(client);
 
@@ -753,13 +755,12 @@ interface Product {
   description?: string;
   isFeaturedProduct?: boolean;
 }
-
 interface ProductPageProps {
-  params: Params & {
+  params: {
     productId: string;
   };
-  searchParams?: { [key: string]: string | string[] | undefined };
 }
+
 
 async function getProduct(productId: string): Promise<Product | null> {
   return await client.fetch(
@@ -856,8 +857,7 @@ function RelatedProducts({ products }: { products: Product[] }) {
     </div>
   );
 }
-
-export default async function ProductPage({ params, searchParams }: ProductPageProps) {
+export default async function ProductPage({ params }: ProductPageProps) {
   const product: Product | null = await getProduct(params.productId);
 
   if (!product) {
