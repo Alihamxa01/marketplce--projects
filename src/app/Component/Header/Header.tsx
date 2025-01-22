@@ -53,6 +53,13 @@ const Header = () => {
              FAQs
             </Link>
 
+            <Link 
+              href="/Admin" 
+              className="text-gray-700 hover:text-pink-500 transition font-medium"
+            >
+            Admin
+            </Link>
+
             
           </nav>
         </div>
