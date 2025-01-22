@@ -120,7 +120,7 @@ export default function ProductList({ products }: ProductListProps) {
     0
   );
 
-  // Filter products based on search query, selected category, and price range
+  // Filter products based on search query, selected category, and price range  
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory

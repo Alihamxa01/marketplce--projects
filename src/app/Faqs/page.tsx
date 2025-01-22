@@ -204,7 +204,10 @@ export default function FAQPage() {
           )}
         </div>
       </main>
-
+      <br/>
+      <br/>
+      <br/>
+      <br/>
        {/* Fixed search bar at the bottom */}
        <footer className="fixed bottom-0 left-0 right-0 bg-blue-100 shadow-lg">
         <div className="max-w-9xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-center">
