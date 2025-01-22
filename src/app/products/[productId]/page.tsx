@@ -221,7 +221,6 @@
 
 
 
-
 import Image from 'next/image';
 import client from '@/sanity/lib/client';
 import imageUrlBuilder from '@sanity/image-url';
@@ -358,7 +357,7 @@ function RelatedProducts({ products }: { products: Product[] }) {
   );
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage({ params }: { params: { productId: string } }) {
   const product = await getProduct(params.productId);
 
   if (!product) {
@@ -461,7 +460,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </div>
       <Footer />
-    </div>);}
+    </div>
+  );
+}
 
 
 
