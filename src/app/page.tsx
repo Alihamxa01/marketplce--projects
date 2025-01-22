@@ -13,7 +13,7 @@ export interface Product {
     };
     hotspot?: boolean;
   };
-  price: string;
+  price: number;
   description?: string;
   discountPercentage?: number;
   isFeaturedProduct?: boolean;
