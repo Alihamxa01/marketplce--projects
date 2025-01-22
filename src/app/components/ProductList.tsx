@@ -1,16 +1,15 @@
-"use client"
+"use client";
 
 import Image from 'next/image';
 import imageUrlBuilder from '@sanity/image-url';
 import client from '@/sanity/lib/client';
 import { SanityImageSource } from '@sanity/image-url/lib/types/types';
-import { useState, useCallback, useEffect } from 'react'; // Import useEffect
+import { useState, useCallback, useEffect } from 'react';
 import debounce from 'lodash.debounce';
 import Footer from '../Component/Footer/Footer';
 import Header from '../Component/Header/Header';
 import { FaFilter } from "react-icons/fa";
 import { TbTrashX } from "react-icons/tb";
-import toast, { Toaster } from 'react-hot-toast';
 
 const builder = imageUrlBuilder(client);
 
@@ -80,13 +79,11 @@ export default function ProductList({ products }: ProductListProps) {
       const existingProduct = prevCart.find((item) => item._id === product._id);
       if (existingProduct) {
         // If the product already exists in the cart, increase its quantity
-        toast.success(`${product.name} quantity increased in cart!`);
         return prevCart.map((item) =>
           item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
         );
       } else {
         // If the product is not in the cart, add it with a quantity of 1
-        toast.success(`${product.name} added to cart!`);
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
@@ -139,9 +136,6 @@ export default function ProductList({ products }: ProductListProps) {
 
   return (
     <div className="bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50">
-      {/* Add Toaster for toast notifications */}
-      <Toaster position="top-center" reverseOrder={false} />
-
       <Header />
 
       <div className="min-h-screen bg-gradient-to-b from-blue-50 via-blue-100 to-blue-100 px-10">
@@ -365,7 +359,6 @@ export default function ProductList({ products }: ProductListProps) {
     </div>
   );
 }
-
 
 // ProductList.tsx
 
