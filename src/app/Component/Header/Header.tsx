@@ -45,6 +45,15 @@ const Header = () => {
             >
               Contact
             </Link>
+
+            <Link 
+              href="/Faqs" 
+              className="text-gray-700 hover:text-pink-500 transition font-medium"
+            >
+             FAQs
+            </Link>
+
+            
           </nav>
         </div>
       </header>
