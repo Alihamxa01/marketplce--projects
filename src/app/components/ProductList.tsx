@@ -10,7 +10,6 @@ import Footer from '../Component/Footer/Footer';
 import Header from '../Component/Header/Header';
 import { FaFilter, FaHeart } from "react-icons/fa";
 import { TbTrashX } from "react-icons/tb";
-import Link from 'next/link';
 
 const builder = imageUrlBuilder(client);
 
