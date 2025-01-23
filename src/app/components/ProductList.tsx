@@ -44,13 +44,14 @@ interface ProductListProps {
   products: Product[];
 }
 
-export default function ProductList({ products }: ProductListProps) {
+export default function ProductList({ products: initialProducts }: ProductListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [minPrice, setMinPrice] = useState<number | string>('');
   const [maxPrice, setMaxPrice] = useState<number | string>('');
   const [showFilters, setShowFilters] = useState(false); // State to toggle filter visibility
   const [cart, setCart] = useState<CartProduct[]>([]); // State to manage cart
+  const [products, setProducts] = useState<Product[]>(initialProducts); // State to manage products
 
   // Load cart from localStorage on component mount
   useEffect(() => {
@@ -75,42 +76,76 @@ export default function ProductList({ products }: ProductListProps) {
 
   // Add to cart handler
   const handleAddToCart = (product: Product) => {
-    setCart((prevCart) => {
-      const existingProduct = prevCart.find((item) => item._id === product._id);
-      if (existingProduct) {
-        // If the product already exists in the cart, increase its quantity
-        return prevCart.map((item) =>
-          item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        // If the product is not in the cart, add it with a quantity of 1
-        return [...prevCart, { ...product, quantity: 1 }];
-      }
-    });
+    if (product.stockLevel && product.stockLevel > 0) {
+      setCart((prevCart) => {
+        const existingProduct = prevCart.find((item) => item._id === product._id);
+        if (existingProduct) {
+          // If the product already exists in the cart, increase its quantity
+          return prevCart.map((item) =>
+            item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+          );
+        } else {
+          // If the product is not in the cart, add it with a quantity of 1
+          return [...prevCart, { ...product, quantity: 1 }];
+        }
+      });
+
+      // Update the stock level of the product in the products array
+      const updatedProducts = products.map((p) =>
+        p._id === product._id ? { ...p, stockLevel: (p.stockLevel || 0) - 1 } : p
+      );
+      setProducts(updatedProducts); // Update the state
+    } else {
+      alert("This product is out of stock!");
+    }
   };
 
   // Remove from cart handler
   const handleRemoveFromCart = (productId: string) => {
-    setCart((prevCart) => prevCart.filter((product) => product._id !== productId));
+    setCart((prevCart) => {
+      const removedProduct = prevCart.find((product) => product._id === productId);
+      if (removedProduct) {
+        // Restore the stock level of the removed product
+        const updatedProducts = products.map((p) =>
+          p._id === productId ? { ...p, stockLevel: (p.stockLevel || 0) + removedProduct.quantity } : p
+        );
+        setProducts(updatedProducts); // Update the state
+      }
+      return prevCart.filter((product) => product._id !== productId);
+    });
   };
 
   // Increase quantity of a product in the cart
   const handleIncreaseQuantity = (productId: string) => {
     setCart((prevCart) =>
-      prevCart.map((item) =>
-        item._id === productId ? { ...item, quantity: item.quantity + 1 } : item
-      )
+      prevCart.map((item) => {
+        if (item._id === productId && item.stockLevel && item.stockLevel > 0) {
+          // Decrease stock level when increasing quantity in cart
+          const updatedProducts = products.map((p) =>
+            p._id === productId ? { ...p, stockLevel: (p.stockLevel || 0) - 1 } : p
+          );
+          setProducts(updatedProducts); // Update the state
+          return { ...item, quantity: item.quantity + 1 };
+        }
+        return item;
+      })
     );
   };
 
   // Decrease quantity of a product in the cart
   const handleDecreaseQuantity = (productId: string) => {
     setCart((prevCart) =>
-      prevCart.map((item) =>
-        item._id === productId && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
+      prevCart.map((item) => {
+        if (item._id === productId && item.quantity > 1) {
+          // Increase stock level when decreasing quantity in cart
+          const updatedProducts = products.map((p) =>
+            p._id === productId ? { ...p, stockLevel: (p.stockLevel || 0) + 1 } : p
+          );
+          setProducts(updatedProducts); // Update the state
+          return { ...item, quantity: item.quantity - 1 };
+        }
+        return item;
+      })
     );
   };
 
@@ -289,7 +324,7 @@ export default function ProductList({ products }: ProductListProps) {
             {filteredProducts.map((product, index) => (
               <div
                 key={`${product.name}-${index}`}
-                className="bg-white rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 group border-2 border-blue-200 hover:border-blue-500"
+                className="bg-white rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 group border-2 border-blue-200 hover:border-blue-500 flex flex-col"
               >
                 <div className="relative aspect-[4/3] w-full bg-blue-50">
                   {product.image && product.image.asset ? (
@@ -311,7 +346,7 @@ export default function ProductList({ products }: ProductListProps) {
                     </div>
                   )}
                 </div>
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-grow">
                   <h2 className="text-2xl font-extrabold text-blue-900 mb-3 group-hover:text-blue-600 transition-colors">
                     {product.name}
                   </h2>
@@ -343,11 +378,17 @@ export default function ProductList({ products }: ProductListProps) {
                     </span>
                   </p>
                   <button
-                    onClick={() => handleAddToCart(product)}
-                    className="mt-4 w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300"
-                  >
-                    Add to Cart
-                  </button>
+  onClick={() => handleAddToCart(product)}
+  className={`mt-4 w-full text-white py-2 px-4 rounded-lg transition duration-300 self-end ${
+    product.stockLevel && product.stockLevel > 0
+      ? "bg-blue-800 hover:bg-gradient-to-r to-blue-600 via-sky-600 from-cyan-400"
+      : "bg-red-700 cursor-not-allowed"
+  }`}
+  style={{ marginTop: 'auto' }}
+  disabled={!product.stockLevel || product.stockLevel <= 0}
+>
+  {product.stockLevel && product.stockLevel > 0 ? "Add to Cart" : "Out of Stock"}
+</button>
                 </div>
               </div>
             ))}
@@ -359,6 +400,12 @@ export default function ProductList({ products }: ProductListProps) {
     </div>
   );
 }
+
+
+
+
+
+
 
 // ProductList.tsx
 
