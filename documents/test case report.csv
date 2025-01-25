@@ -1,0 +1,9 @@
+TEST CASE ID,DESCRIPTION,STEPS,EXPECTED RESULT,ACTUAL RESULT,STATUS,REMARKS
+TC-001,verify tha product listing page,open product page and chek displayed  products,All products should display correct,All products displayed correctly with accurate details,Pass,accurate
+TC-002, Verify cart functionality., Add a product to the cart and verify it in the cart section.,Product details should display correctly in the cart,Product added to the cart and displayed correctly,Pass,Functionality as expected
+TC-003,Verify adding a product to wishlist,Click the heart icon to wishlist.,The product is added to the wishlist,Product successfully added to the wishlist,Pass,Functionality as expected
+TC-004, Verify responsiveness of the product cards.,"Check product cards on mobile, tablet, and desktop views.",Product cards should resize & align without overlap., Product cards adjusted perfectly across all views.,Pass,Accurate display
+TC-005,Verify product search functionality., Enter a product name in the search bar and press Enter.,Show relevant products for the query,Search results displayed correctly,Pass,Functionality as expected
+TC-006,Verify product listing with API data., Open the products page and check if products are fetched via API., Products display correct details fetched from the API.,Products fetched and displayed correctly via API.,Pass,Accurate display
+,,,,,,
+,,,,,,
