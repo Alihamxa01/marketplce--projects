@@ -8,7 +8,6 @@ import { useState, useCallback, useEffect } from 'react';
 import debounce from 'lodash.debounce';
 import { FaFilter, FaHeart } from "react-icons/fa";
 import { TbTrashX } from "react-icons/tb";
-import Link from 'next/link';
 
 const builder = imageUrlBuilder(client);
 
