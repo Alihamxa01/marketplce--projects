@@ -157,7 +157,6 @@ import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { useState } from "react";
 
-
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [pageDropdownOpen, setPageDropdownOpen] = useState(false);
@@ -176,16 +175,16 @@ function Navbar() {
         {/* Main content container */}
         <div className="sm:w-full md:w-[80%] flex items-center justify-between h-[50px]">
           {/* Logo */}
+          <Link href="/">
+            <Image 
+              src="/Hekto.png" 
+              width={98} 
+              height={34} 
+              alt="logo" 
+            />
+          </Link>
 
-
-<Link href="/">   
-       <Image src="/Hekto.png"
-           width={98} 
-           height={34} 
-           alt="logo" 
-           />
-</Link>
-          {/* nav links */}
+          {/* Navigation Links */}
           <div
             className={`${
               open ? "translate-x-0" : "-translate-x-full"
@@ -196,7 +195,7 @@ function Navbar() {
                 <Link href="/">Home</Link>
               </li>
 
-              {/* Pages with dropdown */}
+              {/* Pages Dropdown */}
               <li
                 className="relative p-4 text-[#0D0E43] hover:underline hover:text-[#FB2E86] underline-offset-4"
                 onMouseEnter={() => setPageDropdownOpen(true)}
@@ -209,10 +208,10 @@ function Navbar() {
                   Pages <span>{pageDropdownOpen ? "▲" : "▼"}</span>
                 </button>
 
-                {/* Dropdown menu */}
+                {/* Dropdown Menu */}
                 {pageDropdownOpen && (
                   <ul className="absolute left-0 top-[100%] bg-[#f5f5f5] border border-black shadow-md rounded-md p-2 z-50">
-                    <li className="px-4 py-2 hover:bg-gray-200  rounded-3xl">
+                    <li className="px-4 py-2 hover:bg-gray-200 rounded-3xl">
                       <Link href="/About">About</Link>
                     </li>
                     <li className="px-4 py-2 hover:bg-gray-200 rounded-3xl">
@@ -234,7 +233,7 @@ function Navbar() {
                       <Link href="/Order">Your Order</Link>
                     </li>
                     <li className="px-4 py-2 hover:bg-gray-200 rounded-3xl">
-                      <Link href="/Signup">Signup </Link>
+                      <Link href="/Signup">Signup</Link>
                     </li>
                     <li className="px-4 py-2 hover:bg-gray-200 rounded-3xl">
                       <Link href="/blog">Blog</Link>
@@ -264,23 +263,23 @@ function Navbar() {
             </ul>
           </div>
 
-          {/* Search and toggle button */}
+          {/* Search and Toggle Button */}
           <div className="flex gap-x-4 items-center">
-            
-            {/* Search bar for lg screens */}
+            {/* Search Bar for lg screens */}
             <div className="hidden lg:flex w-[317px] bg-gray-200 rounded-md items-center">
               <input
                 className="w-[270px] h-10 p-1 bg-white border-2 border-[#E7E6EF] outline-none"
                 type="search"
                 placeholder="Search"
               />
-              <div className="text-xl w-[51px] h-[40px] bg-[#FB2E86] text-[#F3F9FF] text-center">
-                <FaSearch />
+              <div className="w-[51px] h-[40px] bg-[#FB2E86] text-[#F3F9FF] flex items-center justify-center">
+                <FaSearch className="text-xl" />
               </div>
             </div>
 
+            {/* Mobile Menu Toggle */}
             <button
-              className="text-black text-3xl md:hidden ml-32 sm:block z-50 b"
+              className="text-black text-3xl md:hidden ml-32 sm:block z-50"
               onClick={toggle}
             >
               {open ? "✖" : "☰"}
@@ -293,4 +292,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
