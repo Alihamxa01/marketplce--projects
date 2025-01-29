@@ -81,7 +81,7 @@ export default function ProductList({ products: initialProducts }: ProductListPr
   );
 
   const handleAddToCart = (product: Product) => {
-    alert ('product add to cart')
+    alert('product added to cart');
     if (product.stockLevel && product.stockLevel > 0) {
       setCart((prevCart) => {
         const existingProduct = prevCart.find((item) => item._id === product._id);
@@ -181,20 +181,42 @@ export default function ProductList({ products: initialProducts }: ProductListPr
   return (
     <div className="bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50">
       <div className="min-h-screen bg-[#f6f6f6] px-10">
-        {/* Filter and Wishlist Icons */}
-        <div className="container mx-auto px-3 py-2 flex justify-end gap-4">
-          <button
-            onClick={() => setShowWishlist(!showWishlist)}
-            className="bg-black text-white p-3 rounded-full hover:bg-red-600 transition duration-300"
-          >
-            <FaHeart />
-          </button>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="bg-black text-white p-3 rounded-full hover:bg-blue-700 transition duration-300"
-          >
-            <FaFilter />
-          </button>
+        {/* Search Bar and Icons Container */}
+        <div className="container mx-auto py-6 px-3 flex flex-wrap items-center gap-4">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              className="w-full px-6 py-3 text-blue-700 rounded-lg border-2 border-blue-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors duration-300 pr-12"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  handleSearch('');
+                }}
+                className="absolute top-1/2 right-4 transform -translate-y-1/2 text-cyan-700 hover:text-cyan-300 focus:outline-none"
+              >
+                ✖
+              </button>
+            )}
+          </div>
+          <div className="flex gap-4">
+            <button
+              onClick={() => setShowWishlist(!showWishlist)}
+              className="bg-black text-white p-3 rounded-full hover:bg-red-600 transition duration-300"
+            >
+              <FaHeart />
+            </button>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="bg-black text-white p-3 rounded-full hover:bg-blue-700 transition duration-300"
+            >
+              <FaFilter />
+            </button>
+          </div>
         </div>
 
         {/* Wishlist Menu */}
@@ -246,27 +268,6 @@ export default function ProductList({ products: initialProducts }: ProductListPr
         {showFilters && (
           <div className="container mx-auto px-3 py-8 border-t-2 border-blue-200">
             <div className="mb-8 flex flex-wrap items-center gap-4">
-              <div className="relative flex-1">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  className="w-full px-6 py-3 text-blue-700 rounded-lg border-2 border-blue-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors duration-300 pr-12"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => {
-                      setSearchQuery('');
-                      handleSearch('');
-                    }}
-                    className="absolute top-1/2 right-4 transform -translate-y-1/2 text-cyan-700 hover:text-cyan-300 focus:outline-none"
-                  >
-                    ✖
-                  </button>
-                )}
-              </div>
-
               <select
                 className="flex-1 max-w-xs px-6 py-3 text-blue-700 rounded-lg border-2 border-blue-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors duration-300"
                 value={selectedCategory || ''}
@@ -356,7 +357,6 @@ export default function ProductList({ products: initialProducts }: ProductListPr
                     ))}
                   </ul>
 
-                  {/* Total Price and Checkout Button */}
                   <div className="mt-6 space-y-4">
                     <div className="text-right">
                       <h3 className="text-xl font-bold text-blue-800">
@@ -377,8 +377,7 @@ export default function ProductList({ products: initialProducts }: ProductListPr
         )}
 
         {/* Product Grid */}
-        
-        {/* Product Grid */}
+      
         {filteredProducts.length === 0 ? (
           <div className="text-center text-3xl text-gray-600 py-52">
             <p className="mb-8">No products found matching your search or filter!</p>
@@ -390,7 +389,6 @@ export default function ProductList({ products: initialProducts }: ProductListPr
                 key={`${product.name}-${index}`}
                 className="bg-white rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 group border-2 border-blue-200 hover:border-blue-500 flex flex-col"
               >
-                <Link href={`/products/${product._id}`}>
                   <div className="relative aspect-[4/3] w-full bg-blue-50">
                     {product.image && product.image.asset ? (
                       <Image
@@ -411,7 +409,7 @@ export default function ProductList({ products: initialProducts }: ProductListPr
                       </div>
                     )}
                   </div>
-                </Link>
+        
                 <div className="p-6 flex flex-col flex-grow">
                   <h2 className="text-2xl font-extrabold text-blue-900 mb-3 group-hover:text-blue-600 transition-colors">
                     {product.name}
