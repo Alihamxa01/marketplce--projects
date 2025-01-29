@@ -376,7 +376,6 @@ export default function ProductList({ products: initialProducts }: ProductListPr
           </div>
         )}
 
-        {/* Product Grid */}
         
         {/* Product Grid */}
         {filteredProducts.length === 0 ? (
@@ -390,7 +389,6 @@ export default function ProductList({ products: initialProducts }: ProductListPr
                 key={`${product.name}-${index}`}
                 className="bg-white rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 group border-2 border-blue-200 hover:border-blue-500 flex flex-col"
               >
-                <Link href={`/products/${product._id}`}>
                   <div className="relative aspect-[4/3] w-full bg-blue-50">
                     {product.image && product.image.asset ? (
                       <Image
@@ -411,8 +409,8 @@ export default function ProductList({ products: initialProducts }: ProductListPr
                       </div>
                     )}
                   </div>
-                </Link>
-                <div className="p-6 flex flex-col flex-grow">
+
+                  <div className="p-6 flex flex-col flex-grow">
                   <h2 className="text-2xl font-extrabold text-blue-900 mb-3 group-hover:text-blue-600 transition-colors">
                     {product.name}
                   </h2>
