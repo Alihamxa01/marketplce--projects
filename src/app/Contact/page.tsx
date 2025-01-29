@@ -2,6 +2,7 @@ import TopHeader  from "../Page/Topheadder/Topheadder";
 import Header from "../Component/Header/Header"
 import Link from "next/link"
 import { ChevronRight } from 'lucide-react'
+import Image from "next/image";
 
 
 export default function Contact() {
@@ -128,7 +129,7 @@ export default function Contact() {
           </div>
 
           <div className="bg-white p-6 rounded-lg flex items-center justify-center ">
-            <img
+            <Image
               src="/e.png"
               alt="Contact Illustration"
               className="max-w-full h-auto"
