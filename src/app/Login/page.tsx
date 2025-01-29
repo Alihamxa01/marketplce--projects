@@ -4,10 +4,15 @@ import { FaGithub } from "react-icons/fa6";
 import Header from "../Component/Header/Header";
 import Footer from "../Component/Footer/Footer";
 
+
+
 export default function LoginPage() {
+
+
   return (
     <div className="bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50 ">
               <Header/>
+              
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-t from-blue-100 via-gray-100 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
 
       <div className="max-w-md w-full space-y-8">

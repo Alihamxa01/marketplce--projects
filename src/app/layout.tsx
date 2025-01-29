@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body
 
-        className=" bg-gradient-to-b from-gray-50 to-gray-100 "
+        className="bg-white text-black "
       >
         {children}
       </body>

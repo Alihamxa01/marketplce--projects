@@ -161,7 +161,7 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50">
+    <div className="min-h-screen  bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50">
  <Header/>
 
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
@@ -233,6 +233,47 @@ export default function FAQPage() {
           </div>
         </div>
       </footer>
+
+
+              {/* Ask a Question Form */}
+              <div className="bg-[#F8F8FD] p-6 rounded-lg py-20 pb-32">
+            <h2 className="text-2xl font-semibold text-[#1D3178] mb-6">Ask a Question</h2>
+            <form className="space-y-4">
+              <div>
+                <input
+                  type="text"
+                  placeholder="Your Name*"
+                  required
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none bg-white"
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Subject*"
+                  required
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none  bg-white"
+                />
+              </div>
+              <div>
+                <textarea
+                  placeholder="Type Your Message*"
+                //   rows="4"
+                  required
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none  bg-white"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                className="w-full sm:w-auto bg-[#FB2E86] hover:bg-[#ec5596] text-white py-2 px-4 rounded-sm"
+              >
+                Send Mail
+              </button>
+            </form>
+          </div>
+
+
+
     </div>
   );
 }

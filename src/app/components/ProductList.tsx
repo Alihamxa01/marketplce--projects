@@ -6,8 +6,6 @@ import client from '@/sanity/lib/client';
 import { SanityImageSource } from '@sanity/image-url/lib/types/types';
 import { useState, useCallback, useEffect } from 'react';
 import debounce from 'lodash.debounce';
-import Footer from '../Component/Footer/Footer';
-import Header from '../Component/Header/Header';
 import { FaFilter, FaHeart } from "react-icons/fa";
 import { TbTrashX } from "react-icons/tb";
 import Link from 'next/link';
@@ -38,7 +36,7 @@ export interface Product {
 }
 
 interface CartProduct extends Product {
-  quantity: number; // Add quantity to the product in the cart
+  quantity: number;
 }
 
 interface ProductListProps {
@@ -50,13 +48,12 @@ export default function ProductList({ products: initialProducts }: ProductListPr
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [minPrice, setMinPrice] = useState<number | string>('');
   const [maxPrice, setMaxPrice] = useState<number | string>('');
-  const [showFilters, setShowFilters] = useState(false); // State to toggle filter visibility
-  const [cart, setCart] = useState<CartProduct[]>([]); // State to manage cart
-  const [products, setProducts] = useState<Product[]>(initialProducts); // State to manage products
-  const [wishlist, setWishlist] = useState<Product[]>([]); // State to manage wishlist
-  const [showWishlist, setShowWishlist] = useState(false); // State to toggle wishlist visibility
+  const [showFilters, setShowFilters] = useState(false);
+  const [cart, setCart] = useState<CartProduct[]>([]);
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [wishlist, setWishlist] = useState<Product[]>([]);
+  const [showWishlist, setShowWishlist] = useState(false);
 
-  // Load cart and wishlist from localStorage on component mount
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
@@ -69,17 +66,14 @@ export default function ProductList({ products: initialProducts }: ProductListPr
     }
   }, []);
 
-  // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  // Save wishlist to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('wishlist', JSON.stringify(wishlist));
   }, [wishlist]);
 
-  // Debounced search handler
   const handleSearch = useCallback(
     debounce((query: string) => {
       setSearchQuery(query);
@@ -87,57 +81,50 @@ export default function ProductList({ products: initialProducts }: ProductListPr
     []
   );
 
-  // Add to cart handler
   const handleAddToCart = (product: Product) => {
+    alert ('product add to cart')
     if (product.stockLevel && product.stockLevel > 0) {
       setCart((prevCart) => {
         const existingProduct = prevCart.find((item) => item._id === product._id);
         if (existingProduct) {
-          // If the product already exists in the cart, increase its quantity
           return prevCart.map((item) =>
             item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
           );
         } else {
-          // If the product is not in the cart, add it with a quantity of 1
           return [...prevCart, { ...product, quantity: 1 }];
         }
       });
 
-      // Update the stock level of the product in the products array
       const updatedProducts = products.map((p) =>
         p._id === product._id ? { ...p, stockLevel: (p.stockLevel || 0) - 1 } : p
       );
-      setProducts(updatedProducts); // Update the state
+      setProducts(updatedProducts);
     } else {
       alert("This product is out of stock!");
     }
   };
 
-  // Remove from cart handler
   const handleRemoveFromCart = (productId: string) => {
     setCart((prevCart) => {
       const removedProduct = prevCart.find((product) => product._id === productId);
       if (removedProduct) {
-        // Restore the stock level of the removed product
         const updatedProducts = products.map((p) =>
           p._id === productId ? { ...p, stockLevel: (p.stockLevel || 0) + removedProduct.quantity } : p
         );
-        setProducts(updatedProducts); // Update the state
+        setProducts(updatedProducts);
       }
       return prevCart.filter((product) => product._id !== productId);
     });
   };
 
-  // Increase quantity of a product in the cart
   const handleIncreaseQuantity = (productId: string) => {
     setCart((prevCart) =>
       prevCart.map((item) => {
         if (item._id === productId && item.stockLevel && item.stockLevel > 0) {
-          // Decrease stock level when increasing quantity in cart
           const updatedProducts = products.map((p) =>
             p._id === productId ? { ...p, stockLevel: (p.stockLevel || 0) - 1 } : p
           );
-          setProducts(updatedProducts); // Update the state
+          setProducts(updatedProducts);
           return { ...item, quantity: item.quantity + 1 };
         }
         return item;
@@ -145,16 +132,14 @@ export default function ProductList({ products: initialProducts }: ProductListPr
     );
   };
 
-  // Decrease quantity of a product in the cart
   const handleDecreaseQuantity = (productId: string) => {
     setCart((prevCart) =>
       prevCart.map((item) => {
         if (item._id === productId && item.quantity > 1) {
-          // Increase stock level when decreasing quantity in cart
           const updatedProducts = products.map((p) =>
             p._id === productId ? { ...p, stockLevel: (p.stockLevel || 0) + 1 } : p
           );
-          setProducts(updatedProducts); // Update the state
+          setProducts(updatedProducts);
           return { ...item, quantity: item.quantity - 1 };
         }
         return item;
@@ -162,33 +147,31 @@ export default function ProductList({ products: initialProducts }: ProductListPr
     );
   };
 
-  // Add to wishlist handler
   const handleAddToWishlist = (product: Product) => {
     setWishlist((prevWishlist) => {
       const isProductInWishlist = prevWishlist.some((item) => item._id === product._id);
       if (isProductInWishlist) {
-        // If the product is already in the wishlist, remove it
         return prevWishlist.filter((item) => item._id !== product._id);
       } else {
-        // If the product is not in the wishlist, add it
         return [...prevWishlist, product];
       }
     });
   };
 
-  // Calculate total price of all items in the cart
+  const handleCheckout = () => {
+    alert('Proceeding to checkout with total: $' + totalPrice.toFixed(2));
+  };
+
   const totalPrice = cart.reduce(
     (total, product) => total + product.price * product.quantity,
     0
   );
 
-  // Filter products based on search query, selected category, and price range  
   const filteredProducts = products.filter((product) => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory
       ? product.category.toLowerCase() === selectedCategory.toLowerCase()
       : true;
-
     const matchesPrice =
       (minPrice ? product.price >= Number(minPrice) : true) &&
       (maxPrice ? product.price <= Number(maxPrice) : true);
@@ -198,20 +181,15 @@ export default function ProductList({ products: initialProducts }: ProductListPr
 
   return (
     <div className="bg-gradient-to-r from-blue-50 via-blue-100 to-blue-50">
-      <Header />
-
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 via-blue-100 to-blue-100 px-10">
+      <div className="min-h-screen bg-[#f6f6f6] px-10">
         {/* Filter and Wishlist Icons */}
         <div className="container mx-auto px-3 py-2 flex justify-end gap-4">
-          {/* Wishlist Icon */}
           <button
             onClick={() => setShowWishlist(!showWishlist)}
             className="bg-black text-white p-3 rounded-full hover:bg-red-600 transition duration-300"
           >
             <FaHeart />
           </button>
-
-          {/* Filter Icon */}
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="bg-black text-white p-3 rounded-full hover:bg-blue-700 transition duration-300"
@@ -248,9 +226,7 @@ export default function ProductList({ products: initialProducts }: ProductListPr
                         />
                       )}
                       <div>
-                        <span className="text-blue-900 font-semibold">
-                          {product.name}
-                        </span>
+                        <span className="text-blue-900 font-semibold">{product.name}</span>
                         <p className="text-sm text-gray-600">${product.price}</p>
                       </div>
                     </div>
@@ -271,7 +247,6 @@ export default function ProductList({ products: initialProducts }: ProductListPr
         {showFilters && (
           <div className="container mx-auto px-3 py-8 border-t-2 border-blue-200">
             <div className="mb-8 flex flex-wrap items-center gap-4">
-              {/* Search Input */}
               <div className="relative flex-1">
                 <input
                   type="text"
@@ -293,7 +268,6 @@ export default function ProductList({ products: initialProducts }: ProductListPr
                 )}
               </div>
 
-              {/* Category Dropdown */}
               <select
                 className="flex-1 max-w-xs px-6 py-3 text-blue-700 rounded-lg border-2 border-blue-400 focus:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors duration-300"
                 value={selectedCategory || ''}
@@ -305,7 +279,6 @@ export default function ProductList({ products: initialProducts }: ProductListPr
               </select>
             </div>
 
-            {/* Advanced Price Filter */}
             <div className="mb-8 flex gap-4">
               <div className="flex-1">
                 <input
@@ -333,70 +306,79 @@ export default function ProductList({ products: initialProducts }: ProductListPr
               {cart.length === 0 ? (
                 <p className="text-gray-600">Your cart is empty.</p>
               ) : (
-                <ul className="space-y-4">
-                  {cart.map((product) => (
-                    <li
-                      key={product._id}
-                      className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md"
-                    >
-                      <div className="flex items-center">
-                        {product.image && product.image.asset && (
-                          <Image
-                            src={urlFor(product.image)
-                              .width(100)
-                              .height(100)
-                              .bg('ffffff')
-                              .url() || ''}
-                            alt={product.name}
-                            width={50}
-                            height={50}
-                            className="object-contain mr-4"
-                          />
-                        )}
-                        <div>
-                          <span className="text-blue-900 font-semibold">
-                            {product.name}
-                          </span>
-                          <p className="text-sm text-gray-600">${product.price}</p>
-                          <div className="flex items-center gap-2 mt-2">
-                            <button
-                              onClick={() => handleDecreaseQuantity(product._id)}
-                              className="text-blue-600 hover:text-blue-800"
-                            >
-                              -
-                            </button>
-                            <span className="text-gray-700">{product.quantity}</span>
-                            <button
-                              onClick={() => handleIncreaseQuantity(product._id)}
-                              className="text-blue-600 hover:text-blue-800"
-                            >
-                              +
-                            </button>
+                <>
+                  <ul className="space-y-4">
+                    {cart.map((product) => (
+                      <li
+                        key={product._id}
+                        className="flex items-center justify-between p-4 bg-white rounded-lg shadow-md"
+                      >
+                        <div className="flex items-center">
+                          {product.image && product.image.asset && (
+                            <Image
+                              src={urlFor(product.image)
+                                .width(100)
+                                .height(100)
+                                .bg('ffffff')
+                                .url() || ''}
+                              alt={product.name}
+                              width={50}
+                              height={50}
+                              className="object-contain mr-4"
+                            />
+                          )}
+                          <div>
+                            <span className="text-blue-900 font-semibold">{product.name}</span>
+                            <p className="text-sm text-gray-600">${product.price}</p>
+                            <div className="flex items-center gap-2 mt-2">
+                              <button
+                                onClick={() => handleDecreaseQuantity(product._id)}
+                                className="text-blue-600 hover:text-blue-800"
+                              >
+                                -
+                              </button>
+                              <span className="text-gray-700">{product.quantity}</span>
+                              <button
+                                onClick={() => handleIncreaseQuantity(product._id)}
+                                className="text-blue-600 hover:text-blue-800"
+                              >
+                                +
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <button
-                        onClick={() => handleRemoveFromCart(product._id)}
-                        className="text-red-600 hover:text-red-800"
-                      >
-                        <TbTrashX className="text-red-600 hover:text-red-800 text-4xl duration-200 hover:underline" />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {/* Total Price */}
-              {cart.length > 0 && (
-                <div className="mt-6 text-right">
-                  <h3 className="text-xl font-bold text-blue-800">
-                    Total: ${totalPrice.toFixed(2)}
-                  </h3>
-                </div>
+                        <button
+                          onClick={() => handleRemoveFromCart(product._id)}
+                          className="text-red-600 hover:text-red-800"
+                        >
+                          <TbTrashX className="text-red-600 hover:text-red-800 text-4xl duration-200 hover:underline" />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Total Price and Checkout Button */}
+                  <div className="mt-6 space-y-4">
+                    <div className="text-right">
+                      <h3 className="text-xl font-bold text-blue-800">
+                        Total: ${totalPrice.toFixed(2)}
+                      </h3>
+                    </div>
+                    <button
+                      onClick={handleCheckout}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-bold text-lg transition duration-300 flex items-center justify-center gap-2"
+                    >
+                      Proceed to Checkout
+                    </button>
+                  </div>
+                </>
               )}
             </div>
           </div>
         )}
 
+        {/* Product Grid */}
+        
         {/* Product Grid */}
         {filteredProducts.length === 0 ? (
           <div className="text-center text-3xl text-gray-600 py-52">
@@ -409,26 +391,28 @@ export default function ProductList({ products: initialProducts }: ProductListPr
                 key={`${product.name}-${index}`}
                 className="bg-white rounded-xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 group border-2 border-blue-200 hover:border-blue-500 flex flex-col"
               >
-                <div className="relative aspect-[4/3] w-full bg-blue-50">
-                  {product.image && product.image.asset ? (
-                    <Image
-                      src={urlFor(product.image)
-                        .width(800)
-                        .height(600)
-                        .bg('ffffff')
-                        .url() || ''}
-                      alt={product.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-contain border-b-4 border-b-blue-400"
-                      priority={index < 4}
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center h-full bg-blue-200 text-blue-700">
-                      No Image Available
-                    </div>
-                  )}
-                </div>
+                <Link href={`/products/${product._id}`}>
+                  <div className="relative aspect-[4/3] w-full bg-blue-50">
+                    {product.image && product.image.asset ? (
+                      <Image
+                        src={urlFor(product.image)
+                          .width(800)
+                          .height(600)
+                          .bg('ffffff')
+                          .url() || ''}
+                        alt={product.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-contain border-b-4 border-b-blue-400"
+                        priority={index < 4}
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full bg-blue-200 text-blue-700">
+                        No Image Available
+                      </div>
+                    )}
+                  </div>
+                </Link>
                 <div className="p-6 flex flex-col flex-grow">
                   <h2 className="text-2xl font-extrabold text-blue-900 mb-3 group-hover:text-blue-600 transition-colors">
                     {product.name}
@@ -490,7 +474,7 @@ export default function ProductList({ products: initialProducts }: ProductListPr
         )}
       </div>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
