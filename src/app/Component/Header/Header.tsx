@@ -225,7 +225,7 @@ function Navbar() {
                       <Link href="/product-details">Product Details</Link>
                     </li>
                     <li className="px-4 py-2 hover:bg-gray-200 rounded-3xl">
-                      <Link href="/Curt">Cart</Link>
+                      <Link href="/Proceed">Cart</Link>
                     </li>
                     <li className="px-4 py-2 hover:bg-gray-200 rounded-3xl">
                       <Link href="/Order">Your Order</Link>

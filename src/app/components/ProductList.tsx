@@ -8,6 +8,7 @@ import { useState, useCallback, useEffect } from 'react';
 import debounce from 'lodash.debounce';
 import { FaFilter, FaHeart } from "react-icons/fa";
 import { TbTrashX } from "react-icons/tb";
+import Link from 'next/link';
 
 const builder = imageUrlBuilder(client);
 
@@ -363,12 +364,18 @@ export default function ProductList({ products: initialProducts }: ProductListPr
                         Total: ${totalPrice.toFixed(2)}
                       </h3>
                     </div>
+
+                    <Link
+                      href="/Proceed"
+                      >
                     <button
                       onClick={handleCheckout}
                       className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-bold text-lg transition duration-300 flex items-center justify-center gap-2"
                     >
                       Proceed to Checkout
                     </button>
+                    </Link>
+
                   </div>
                 </>
               )}
