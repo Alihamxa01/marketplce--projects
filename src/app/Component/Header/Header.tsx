@@ -289,4 +289,8 @@ function Navbar() {
   );
 }
 
+<<<<<<< HEAD
 export default Navbar;
+=======
+export default Navbar;
+>>>>>>> 3d4886ec3fb7b0e7801a2bc2225cf6fe6babc35e
