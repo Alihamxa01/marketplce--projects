@@ -9,6 +9,7 @@ import client from '@/sanity/lib/client';
 import { Product } from '../components/ProductList';
 import Header from '../Component/Header/Header'
 import Footer from '../Component/Footer/Footer'
+import Topheadder from '../Page/Topheadder/Topheadder'
 
 const builder = imageUrlBuilder(client);
 
@@ -23,7 +24,7 @@ interface CartProduct extends Product {
 export default function Checkout() {
   const [cartItems, setCartItems] = useState<CartProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentStep, setCurrentStep] = useState(1);
+  // const [currentStep, setCurrentStep] = useState(1);
   const [address, setAddress] = useState({
     name: '',
     email: '',
@@ -102,9 +103,11 @@ export default function Checkout() {
   }
 
   return (
-    <div>
-        <Header/>
     <div className="min-h-screen bg-gray-100 ">
+    {/* <div className="bg-gray-100"> */}
+      <Topheadder/>
+        <Header/>
+    {/* <div className="min-h-screen bg-gray-100 "> */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center mb-8">
           <Link href="/" className="flex items-center text-gray-600 hover:text-gray-900">
@@ -127,24 +130,6 @@ export default function Checkout() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Progress Steps */}
-              <div className="bg-white p-6 rounded-2xl shadow-sm">
-                <div className="flex justify-between mb-8">
-                  {[1, 2, 3].map((step) => (
-                    <div key={step} className="flex flex-col items-center">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        currentStep >= step ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-600'
-                      }`}>
-                        {step}
-                      </div>
-                      <span className="mt-2 text-sm text-gray-600">
-                        {step === 1 ? 'Cart' : step === 2 ? 'Shipping' : 'Payment'}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {/* Cart Items */}
               <div className="bg-white p-6 rounded-2xl shadow-sm">
                 <h2 className="text-xl font-semibold mb-6 text-indigo-900">Shopping Cart</h2>
@@ -312,6 +297,8 @@ export default function Checkout() {
               </div>
             </div>
 
+
+
             {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="bg-white p-6 rounded-2xl shadow-sm sticky top-8">
@@ -349,15 +336,9 @@ export default function Checkout() {
       </div>
 
      
-    </div>
+    {/* </div> */}
 
-    <Footer/
+    <Footer/>
     </div>
   );
-}
-
-
-
-
-
-
+ }
