@@ -131,6 +131,8 @@ export default function Contact() {
           <div className="bg-white p-6 rounded-lg flex items-center justify-center ">
             <Image
               src="/e.png"
+              width={500}
+              height={500}
               alt="Contact Illustration"
               className="max-w-full h-auto"
             />
