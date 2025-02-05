@@ -341,4 +341,8 @@ export default function Checkout() {
     <Footer/>
     </div>
   );
+<<<<<<< HEAD
  }
+=======
+ }
+>>>>>>> 98179ca0887f8a7c9630bd2675ce49963a117f6d
