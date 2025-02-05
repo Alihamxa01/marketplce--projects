@@ -351,7 +351,7 @@ export default function Checkout() {
      
     </div>
 
-    <Footer/>
+    <Footer/
     </div>
   );
 }
